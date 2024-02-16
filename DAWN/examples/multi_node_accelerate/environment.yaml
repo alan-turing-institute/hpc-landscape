@@ -1,4 +1,4 @@
-name: /home/hpcsten1/torch_20/cenv
+name: torch-env
 channels:
   - conda-forge
   - intel

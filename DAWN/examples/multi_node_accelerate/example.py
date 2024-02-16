@@ -1,6 +1,7 @@
 """Let accelerate do the XPU placement.
 
 Remember to set CCL_WORKER_COUNT=1 before running."""
+
 import os
 import time
 import warnings
@@ -20,18 +21,18 @@ os.environ["WORLD_SIZE"] = size
 
 # Let MPI set the local rank.
 # Otherwise all models end up on xpu:0.
-# See accelerate/state.py, line 177ish for more. 
+# See accelerate/state.py, line 177ish for more.
 os.environ["ACCELERATE_TORCH_DEVICE"] = "xpu:" + os.environ["MPI_LOCALRANKID"]
 
 nodelist_env = os.getenv("SLURM_JOB_NODELIST")
 if "[" in nodelist_env:
     # either a single hostname or e.g. "pvc-s-[24-25]"
-    numbers = re.compile("\d+")
-    prefix = nodelist_env[0:nodelist_env.index("[")]
+    numbers = re.compile(r"\d+")
+    prefix = nodelist_env[0 : nodelist_env.index("[")]
 
     nodelist = tuple(prefix + x for x in numbers.findall(nodelist_env))
 else:
-    nodelist = nodelist_env,
+    nodelist = (nodelist_env,)
 master_addr = nodelist[0]
 
 os.environ["MASTER_ADDR"] = master_addr
@@ -43,7 +44,7 @@ model = torch.nn.Sequential(
     torch.nn.Linear(in_features=1, out_features=1_000),
     torch.nn.Linear(in_features=1_000, out_features=1_000),
     torch.nn.Linear(in_features=1_000, out_features=1),
-    )
+)
 optimizer = torch.optim.Adam(model.parameters())
 
 weight = 0.7
@@ -86,5 +87,5 @@ for epoch in range(50):
 
 
 print("success. loss was", loss, flush=True)
-print("counter was", time.perf_counter()-start_counter, flush=True)
-print("time taken was", time.time()-start_time, flush=True)
+print("counter was", time.perf_counter() - start_counter, flush=True)
+print("time taken was", time.time() - start_time, flush=True)

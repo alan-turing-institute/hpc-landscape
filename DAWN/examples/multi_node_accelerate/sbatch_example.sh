@@ -7,6 +7,8 @@
 #SBATCH --output=job.out
 #SBATCH --cpus-per-gpu=10
 
+set -o errexit
+
 # Set up the environment.
 module load intel-oneapi-tbb/2021.11.0/oneapi/xtkj6nyp
 module load intel-oneapi-compilers/2024.0.0/gcc/znjudqsi
