@@ -6,7 +6,7 @@
 1. To create an environment, you'll need to either:
    1. Initialise it for the whole of your shell with `conda init`.
    2. Enable it for this shell session with `source ~/miniconda3/etc/profile.d/conda.sh`.
-1. Create an environment with the `environment.yaml`.
+1. Create a Python 3.10 environment with the packages specified in `environment.yaml`. **Note** Using these versions is important as (at least some) versions of Torch 2.1 are known not to work.
 
 ## Run
 
