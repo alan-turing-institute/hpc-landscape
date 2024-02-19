@@ -2,7 +2,7 @@
 
 ## Setup
 
-1. Install miniconda using these instructions.
+1. Install miniconda using [these](https://docs.anaconda.com/free/miniconda/miniconda-install/#installing-miniconda) instructions.
 1. To create an environment, you'll need to either:
    1. Initialise it for the whole of your shell with `conda init`.
    2. Enable it for this shell session with `source ~/miniconda3/etc/profile.d/conda.sh`.
