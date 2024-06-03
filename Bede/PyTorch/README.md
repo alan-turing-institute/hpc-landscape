@@ -147,8 +147,8 @@ You should be left with a wheel called something like `torch-2.4.0a0+gitbad8d25-
 Note the different parts of this name:
 1. `torch`: the name of the package.
 2. `2.4.0a0+gitbad8d25`: the package version, here we’ve built from a specific git commit that lives under the `2.4.0a0` tag.
-3. `cp39`: the Python distribution tag; CPython 3.12, matching the Python we built the package with.
-4. `cp39`: the Python ABI tag: CPython 3.12 for the same reason.
+3. `cp312`: the Python distribution tag; CPython 3.12, matching the Python we built the package with.
+4. `cp312`: the Python ABI tag: CPython 3.12 for the same reason.
 5. `linux_aarch64`: the platform tag, in this case Linux running on an aarch64 (ARM) processor.
 
 If we try to install the package on a platform where these aren’t compatible, the install will fail.
