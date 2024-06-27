@@ -39,8 +39,8 @@ export CCL_WORKER_COUNT=1
 
 # Capture usage
 xpu-smi discovery --dump 1,2,16,19
-stdbuf -o0 vmstat -t 1 -y > "cpu.txt" &
-stdbuf -o0 xpu-smi dump -m 0,1,2 -i 1 > "gpu.txt" &
+stdbuf -o0 vmstat -t 1 -y > "cpu.out" &
+stdbuf -o0 xpu-smi dump -m 0,1,2 -i 1 > "gpu.out" &
 
 # Check that we can call mpirun with something simple.
 mpirun -n 16 -ppn 8 -prepend-rank hostname
