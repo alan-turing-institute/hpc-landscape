@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --partition=pvc
-#SBATCH --time=6
+#SBATCH --time=01:00:00
 #SBATCH --nodes=2
 #SBATCH --gpus=8
 #SBATCH --gpus-per-node=4
@@ -10,6 +10,8 @@
 set -o errexit
 
 # Set up the environment.
+module purge
+module load default-dawn
 module load intelpython-conda/2024.0.1.3
 module load intel-oneapi-tbb/2021.11.0/oneapi/xtkj6nyp
 module load intel-oneapi-compilers/2024.0.0/gcc/znjudqsi
@@ -37,8 +39,8 @@ export CCL_WORKER_COUNT=1
 
 # Capture usage
 xpu-smi discovery --dump 1,2,16,19
-stdbuf -o0 vmstat -t 1 -y > "cpu-${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}".txt &
-stdbuf -o0 xpu-smi dump -m 0,1,2 -i 1 > "dmon-${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}".txt &
+stdbuf -o0 vmstat -t 1 -y > "cpu.txt" &
+stdbuf -o0 xpu-smi dump -m 0,1,2 -i 1 > "gpu.txt" &
 
 # Check that we can call mpirun with something simple.
 mpirun -n 16 -ppn 8 -prepend-rank hostname
