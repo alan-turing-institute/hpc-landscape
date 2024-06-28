@@ -238,7 +238,7 @@ dependencies:
   - pyyaml=6.0.1=py310h2372a71_1
   - qt-main=5.15.8=hc47bfe8_16
   - querystring_parser=1.2.4=py_0
-  - rdma-core=50.0=hd3aeb46_0
+  - rdma-core=50.0
   - re2=2023.06.02=h2873b5e_0
   - readline=8.2=h8228510_1
   - requests=2.31.0=pyhd8ed1ab_0
