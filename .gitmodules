@@ -1,0 +1,3 @@
+[submodule "DAWN/examples/gpt-lightning/lig-GPT"]
+	path = DAWN/examples/gpt_lightning/lit-GPT
+	url = https://github.com/llewelld/lit-GPT
