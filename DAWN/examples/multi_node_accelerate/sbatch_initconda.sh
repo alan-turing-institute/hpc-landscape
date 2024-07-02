@@ -1,5 +1,6 @@
 #!/bin/bash
 #SBATCH --partition=pvc
+#SBATCH --account <PROJECT_ID>
 #SBATCH --time=00:20:00
 #SBATCH --nodes=1
 #SBATCH --gpus=1

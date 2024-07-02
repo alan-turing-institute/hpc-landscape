@@ -25,7 +25,9 @@ During training `vmstat` and `xpi-smi` are used to collect data bout CPU and GPU
 ## Setup
 
 Before starting the training script a Conda environment must be set up containing the required dependencies.
-This can be done by executing the `sbatch_initconda.sh` script using SLURM:
+This can be done by executing the `sbatch_initconda.sh` script using SLURM.
+
+Before running the script, replace <PROJECT_ID> with your project account on the 3rd line where it says “#SBATCH --account <PROJECT_ID>”.
 
 ```
 sbatch sbatch_initconda.sh
@@ -52,7 +54,9 @@ Here are its constituent pieces.
 8. Line 49: Run the training script.
    This line kicks off all the real work that happens in `example.py`.
 
-You should batch execute the script to run the two-node, eight-GPU PyTorch training as described above:
+You should batch execute the script to run the two-node, eight-GPU PyTorch training as described above.
+
+Before running the script, replace <PROJECT_ID> with your project account on the 3rd line where it says “#SBATCH --account <PROJECT_ID>”.
 
 ```
 sbatch sbatch_example.sh
