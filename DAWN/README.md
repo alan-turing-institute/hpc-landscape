@@ -1,9 +1,9 @@
 # DAWN
 
+**Last updated: 2024-07-10**
+
 Dawn is a new supercomputing resource hosted by the Cambridge Open Zettascale Lab and run by the University of Cambridge Research Computing Service (RCS).
 It’s been developed as part of the Artificial Intelligence Research Resource (AIRR) project and is billed as the UK’s [fastest artificial intelligence supercomputer](https://www.hpc.cam.ac.uk/d-w-n).
-
-With JADE2 ramping down during the Autumn of 2024 and Baskerville due to do the same the Spring after, research at the Turing will be gradually transitioning to the new AIRR systems: DAWN, Isambard-AI and the upcoming AIRR+ services.
 
 ## DAWN Hardware
 
@@ -25,18 +25,11 @@ This is the service through which DAWN is accessed, run by RCS at Cambridge.
 PVC: the Intel Data Center GPU Max 1550 GPU was originally codenamed “Ponte Vecchio” and is sometimes referred to as a “PVC GPU”.
 In development libraries such as PyTorch it’s likely to be referred to as an “XPU”.
 
-# Getting access to DAWN
-
-Currently DAWN is still in its early access period.
-Eventually it’s expected that access will be delegated to UKRI, but for now, Turing researchers can request access on an individual basis and with the understanding that access may have to be re negotiated (meaning that it could be withdrawn) in the future.
-
-In the first instance we request Turing researchers wanting access to DAWN to get in contact with the RCP Team either by submitting the [Request Allocation](https://turingcomplete.topdesk.net/tas/public/ssp/content/serviceflow?unid=ac51b39d8bfc46f9bf41132ef8601b5e) form on [Turing Complete](https://turingcomplete.topdesk.net/) (Research Services > Research Computing Platforms > Request Allocation) or by getting in touch by [email](mailto:ResearchComputePlatforms@turing.ac.uk) to discuss your requrements.
-While we do currently have researchers using DAWN, we don’t have any general access agreement, so the RCP team will need to approach the RCS team individually and with a clear justification and request for access.
-We’ll therefore need to go through this with you in some detail to understand your needs and to assess whether DAWN would be the most appropriate service for your needs.
-
-Having said all that, we are keen to get researchers using DAWN, so if you’re interested, please do get in touch.
-
 ## Accessing compute
+
+In order to use DAWN you will first need an account on the system.
+The process for getting a project allocation and agreement to use the system falls outside the scope of this walkthrough.
+However, having gained this agreement, we will detail the steps we went through in order to set the our account up.
 
 Having liaised with RCS at Cambridge and assuming that they agree for a project to make use of DAWN, the next steps would be:
 
@@ -63,17 +56,19 @@ In this directory you’ll find the following examples:
 
 1. [DDP Demo](./examples/ddp_multi_node): Intel’s example code, a DDP example based on Multi-GPU AI Training (Data-Parallel) with Intel&reg; Extension for PyTorch.
 2. [Multi Node Accelerate](./examples/multi_node_accelerate): An example using PyTorch accelerate to distribute training across multiple nodes.
-3. [Distributed lit-GPT](/examples/lit-gpt): Running the min-GPT code over multiple nodes using PyTorch Lightning.
+3. [Distributed lit-GPT](./examples/gpt_lightning): Running the min-GPT code over multiple nodes using PyTorch Lightning.
+
+## Hints and tips
+
+The [Hints and Tips](./hints-and-tips) directory contains a collection of useful information we've gathered while working with DAWN.
 
 ## Documentation
 
 For more information about using DAWN once you have access, see the following docs.
 
-DAWN info on Mathison: https://mathison.turing.ac.uk/page/3297
-
 DAWN documentation: https://docs.hpc.cam.ac.uk/hpc/user-guide/pvc.html
 
 Storage docs: https://docs.hpc.cam.ac.uk/storage/rds/
 
-Support: support@hpc.cam.ac.uk
+You can email Cambridge HPC at: support@hpc.cam.ac.uk
 

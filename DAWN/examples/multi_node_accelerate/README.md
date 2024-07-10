@@ -5,7 +5,7 @@ Note that each GPU on DAWN is split into two stacks, so we’ll need eight proce
 
 The example uses PyTorch accelerate to simplify training and distribution.
 
-Although configure for two nodes and eight GPUs, the code is simple and clear, so it should be self explanatory how you could increase the number of nodes and GPUs.
+Although configured for two nodes and eight GPUs, the code is simple and clear, so it should be self explanatory how you could increase the number of nodes and GPUs.
 
 The training loop can be seen in the `example.py` file, which is where the actual work happens.
 Let’s unravel the various execution blocks.
@@ -20,7 +20,7 @@ Let’s unravel the various execution blocks.
 4. Lines 65:91: Run the training loop.
    This runs a total of 50 epochs
 
-During training `vmstat` and `xpi-smi` are used to collect data bout CPU and GPU usage respectively.
+During training `vmstat` and `xpi-smi` are used to collect data about CPU and GPU usage respectively.
 
 ## Setup
 
