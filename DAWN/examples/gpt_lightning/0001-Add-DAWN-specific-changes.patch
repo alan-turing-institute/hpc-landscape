@@ -1,0 +1,109 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: David Llewellyn-Jones <dllewellyn-jones@turing.ac.uk>
+Date: Wed, 3 Jul 2024 11:19:34 +0100
+Subject: [PATCH] Add DAWN-specific changes
+
+Adds changes needed to get the example working on DAWN. Makes all required
+changes except for adding the xpu.py file, which must be added manually.
+---
+ lightning_gpt/callbacks.py | 21 +++++++++++++++++++++
+ train.py                   | 22 ++++++++++++++++++----
+ 2 files changed, 39 insertions(+), 4 deletions(-)
+
+diff --git a/lightning_gpt/callbacks.py b/lightning_gpt/callbacks.py
+index d9ff122..65f41b4 100644
+--- a/lightning_gpt/callbacks.py
++++ b/lightning_gpt/callbacks.py
+@@ -26,3 +26,24 @@ class CUDAMetricsCallback(Callback):
+ 
+     def root_gpu(self, trainer: "Trainer") -> int:
+         return trainer.strategy.root_device.index
++
++class XPUMetricsCallback(Callback):
++    def on_train_epoch_start(self, trainer: "Trainer", pl_module: "LightningModule") -> None:
++        # Reset the memory use counter
++        torch.xpu.reset_peak_memory_stats(self.root_gpu(trainer))
++        torch.xpu.synchronize(self.root_gpu(trainer))
++        self.start_time = time.time()
++
++    def on_train_epoch_end(self, trainer: "Trainer", pl_module: "LightningModule") -> None:
++        torch.xpu.synchronize(self.root_gpu(trainer))
++        max_memory = torch.xpu.max_memory_allocated(self.root_gpu(trainer)) / 2**20
++        epoch_time = time.time() - self.start_time
++
++        max_memory = trainer.strategy.reduce(max_memory)
++        epoch_time = trainer.strategy.reduce(epoch_time)
++
++        rank_zero_info(f"Average Epoch time: {epoch_time:.2f} seconds")
++        rank_zero_info(f"Average Peak memory {max_memory:.2f}MiB")
++
++    def root_gpu(self, trainer: "Trainer") -> int:
++        return trainer.strategy.root_device.index
+diff --git a/train.py b/train.py
+index 2b649af..91037ce 100644
+--- a/train.py
++++ b/train.py
+@@ -3,6 +3,9 @@ from argparse import ArgumentParser
+ from urllib.request import urlopen
+ from urllib.error import URLError
+ 
++# XPUAccelerator must be imported before PyTorch or Lightning
++import xpu
++
+ import lightning as L
+ import torch
+ from torch.utils.data import DataLoader
+@@ -10,13 +13,14 @@ from torch.utils.data import DataLoader
+ from lightning_gpt import callbacks, data, models
+ from lightning.pytorch.utilities import rank_zero_info
+ 
++from torch.distributed import init_process_group, destroy_process_group
++import oneccl_bindings_for_pytorch
++from lightning.pytorch.strategies import DDPStrategy
+ 
+ FILENAME = "shakespeare_input.txt"
+ URL = f"https://cs.stanford.edu/people/karpathy/char-rnn/{FILENAME}"
+ 
+-
+ def main(args):
+-
+     try:
+         if os.path.exists(FILENAME):
+             with open(FILENAME, "r") as f:
+@@ -29,6 +33,10 @@ def main(args):
+     except Exception as e:
+         print(f"Unexpected error: {e}")
+ 
++    os.environ["RANK"] = str(int(os.environ["PMI_RANK"]))
++    os.environ["WORLD_SIZE"] = str(int(os.environ["PMI_SIZE"]))
++    init_process_group(backend='ccl')
++
+     train_dataset = data.CharDataset(text, args.block_size)
+ 
+     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, num_workers=args.num_workers)
+@@ -96,17 +104,23 @@ def main(args):
+ 
+     callback_list = []
+ 
++    if torch.xpu.is_available():
++        torch.set_float32_matmul_precision("high")
++        callback_list.append(callbacks.XPUMetricsCallback())
++
+     if torch.cuda.is_available():
+         torch.set_float32_matmul_precision("high")
+         callback_list.append(callbacks.CUDAMetricsCallback())
+ 
+-    trainer = L.Trainer.from_argparse_args(
++    strategy = xpu.DDPXPUStrategy(process_group_backend='nccl')
++
++    trainer = xpu.Trainer.from_argparse_args(
+         args,
+         max_epochs=2,
+         gradient_clip_val=1.0,
+         callbacks=callback_list,
+         enable_checkpointing=False,
+-        accelerator="auto",
++        strategy=strategy,
+     )
+ 
+     trainer.fit(model, train_loader)
