@@ -3,7 +3,7 @@
 Before you can make use of them you’ll need to download the models.
 See [llama-download.md](llama-download.md) for how to go about doing this on Baskerville.
 
-# Llama 2 7B inference, single node, single GPU
+## Llama 2 7B inference, single node, single GPU
 
 The 7B parameter Llama 2 model will run with a single process on a single node with a single GPU.
 The checkpoint provided for use with the example will, in fact, only work with a single process.
@@ -13,7 +13,7 @@ With too little RAM the process will be sent a SIGKILL termination signal, the p
 
 The RAM, node, GPU and process quantities must be explicitly configured using `srun` for things to work.
 
-## 1. Log in to a single node with a single GPU and a suitable configuration:
+### 1. Log in to a single node with a single GPU and a suitable configuration:
 
 You’ll need to replace `<PROJECT_ID>` with the name of your project.
 
@@ -27,7 +27,7 @@ $ srun --qos turing \
     --pty bash
 ```
 
-## 2. Set up the environment on the node:
+### 2. Set up the environment on the node:
 
 Note that the very first command here moves in to the `llama` directory, which is the directory containing the `example_text_completion.py` file.
 We have to be inside this directory for things to work.
@@ -45,7 +45,7 @@ $ pip install -e .
 $ pip install -r requirements.txt
 ```
 
-## 3. Run the example script that performs a bunch of inference steps:
+### 3. Run the example script that performs a bunch of inference steps:
 
 ```shell
 $ python -m torch.distributed.run \
@@ -83,7 +83,7 @@ One things to note is that in the Llama docs it [recommends](https://github.com/
 When `torchrun` is used directly in this way it doesn’t support Python virtual environments because it defaults to the system-installed Python.
 To circumvent this we’ve switched `torchrun` out for `python -m torch.distributed.run` instead.
 
-## 4. Tidy up
+### 4. Tidy up
 
 Once you’re done don’t forget to log out of the node so that it can be released for access by someone else.
 If you forget to do this the node will automatically close your session once the full 30 minutes you requested are up.
@@ -93,7 +93,7 @@ $ deactivate
 $ exit
 ```
 
-# Llama 2 13B inference, single node, two GPUs
+## Llama 2 13B inference, single node, two GPUs
 
 The 13B parameter Llama 2 model will run with two processes on a single node with two GPUs.
 This arrangement is a requirement for the checkpoint to work.
@@ -103,7 +103,7 @@ With too little RAM the process will be sent a SIGKILL termination signal, the p
 
 The RAM, node, GPU and process quantities must be explicitly configured using `srun` for things to work.
 
-## 5. Log in to a single node with a single GPU and a suitable configuration:
+### 5. Log in to a single node with a single GPU and a suitable configuration:
 
 You’ll need to replace `<PROJECT_ID>` with the name of your project.
 
@@ -117,7 +117,7 @@ $ srun --qos turing \
     --pty bash
 ```
 
-## 6. Set up the environment on the node:
+### 6. Set up the environment on the node:
 
 We assume you’re already in the `llama` directory as in step 2 above.
 If not you should use `cd` to move there first.
@@ -133,7 +133,7 @@ $ . ./venv/bin/activate
 We’re also assuming here that the virtual environment was already created in step 2 above, so we just activate it.
 If you’ve not already done this then you’ll need to run the commands there to create it as well.
 
-## 7. Run the example script that performs a bunch of inference steps:
+### 7. Run the example script that performs a bunch of inference steps:
 
 ```shell
 $ python -m torch.distributed.run \
@@ -167,7 +167,7 @@ Art and love in air
 [...]
 ```
 
-## 8. Tidy up
+### 8. Tidy up
 
 Once you’re done don’t forget to log out of the node so that it can be released for access by someone else.
 If you forget to do this the node will automatically close your session once the full 30 minutes you requested are up.
@@ -177,7 +177,7 @@ $ deactivate
 $ exit
 ```
 
-# Llama 2 70B inference, two nodes, eight GPUs
+## Llama 2 70B inference, two nodes, eight GPUs
 
 The 70B parameter LLama 2 model requires considerably more resources to execute compared to the smaller Llama 2 models.
 The checkpoint provided for the example script requires eight processes and eight GPUs.
@@ -189,7 +189,7 @@ Using `screen` or `tmux` will make your life a lot easier when doing this.
 If you’re not comfortable with either of these, as an alternative you can open two terminals and log in to Baskerville twice.
 You’ll end up with a similar experience.
 
-## 9. Provision two nodes:
+### 9. Provision two nodes:
 
 Here you’ll again need to replace `<PROJECT_ID>` with the name of your project.
 
@@ -207,7 +207,7 @@ In the above command we’re provisioning two nodes, eight GPUs and 32 GiB of RA
 We’ll need all of this computing power to run the model (the checkpoint requires eight processes).
 The `srun` command above not only provisions the node, it also logs you in to one of them.
 
-## 10. Find the names of the nodes.
+### 10. Find the names of the nodes.
 
 ```shell
 $ squeue --me --format="%N" --noheader
@@ -227,7 +227,7 @@ bask-pg0308u05a,bask-pg0308u06a
 
 So I’d replace any instance of `<PRIMARY_NODE>` in the commands below with `bask-pg0308u05a` and any instance of `<SECONDARY_NODE>` with `bask-pg0308u06a`.
 
-## 11. Configure the primary node.
+### 11. Configure the primary node.
 
 ```shell
 $ cd llama
@@ -243,7 +243,7 @@ If you’ve deleted the virtual environment, you can create it again using the i
 
 Since we now have two nodes to worry about, we’ll need to configure the second node as well.
 
-## 12. Log in to the secondary node.
+### 12. Log in to the secondary node.
 
 If you’re using gnu screen or tmux you can switch to a new shell.
 If you’ve opened two terminals, move to the other terminal.
@@ -253,7 +253,7 @@ Either way, make sure you leave the shell on the primary node running.
 $ ssh <SECONDARY_NODE>
 ```
 
-## 13. Configure the secondary node.
+### 13. Configure the secondary node.
 
 This is the same as for the primary node, but we have to do it on both.
 
@@ -266,7 +266,7 @@ $ module load PyTorch/2.1.2-foss-2022b-CUDA-11.8.0
 $ . ./venv/bin/activate
 ```
 
-## 14. Execute the example script on the primary node:
+### 14. Execute the example script on the primary node:
 
 Move back to the shell on the primary node.
 You can now start the example script.
@@ -290,7 +290,7 @@ This command runs the script using `torchrun`, telling it to use two nodes and f
 Since this is only running on a single node it will only start up four of the eight processes.
 The script will wait until the other four processes have started (which we’ll do in the next step) before continuing.
 
-## 15. Execute the example script on the secondary node:
+### 15. Execute the example script on the secondary node:
 
 Now move to the terminal on the secondary node and run this similar &mdash; but not *quite* identical &mdash; command.
 
@@ -308,7 +308,7 @@ $ python -m torch.distributed.run \
     --max_batch_size 6
 ```
 
-## 16. Await the results
+### 16. Await the results
 
 Eventually the script will generate output using the model which is output to the console.
 You should get very similar output on both nodes.
@@ -331,7 +331,7 @@ Romance in the air
 [...]
 ```
 
-## 17. Tidy up
+### 17. Tidy up
 
 Make sure you log out of both nodes once you’re done by running the following commands on both nodes.
 This will release the resources and make them available for use by others.

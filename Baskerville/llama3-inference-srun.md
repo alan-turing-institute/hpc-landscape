@@ -76,7 +76,7 @@ Art in every stone
 ```
 
 One things to note is that in the Llama 3 docs it [recommends](https://github.com/meta-llama/llama3?tab=readme-ov-file#quick-start) to use `torchrun` to execute the script.
-When `torchrun` is used directly in thisß way it doesn’t support Python virtual environments because it defaults to the system-installed Python.
+When `torchrun` is used directly in this way it doesn’t support Python virtual environments because it defaults to the system-installed Python.
 To circumvent this we’ve switched `torchrun` out for `python -m torch.distributed.run` instead.
 
 ## 4. Tidy up

@@ -30,6 +30,8 @@ Using your favourite text editor, create a batch file with the contents below.
 
 In this script you’ll need to replace `<PROJECT_ID>` with the name of your project and `<LLAMA2_PATH>` with the full path of your cloned llama repository from Step 1.
 
+If it doesn't already exist, a virtual environment will be created and configured automatically in a directory called `venv` immediately inside the directory you set `<LLAMA2_PATH>` to.
+
 Make sure you call the script `batch-llama2-7b-inf.sh`.
 Technically you can give it any name, but I’ve assumed it’s called this in the steps that follow.
 
@@ -152,7 +154,7 @@ River Seine's gentle flow
 
 ## Llama 2 13B inference, single node, two GPUs
 
-The 13B parameter Llama 2 model will run with tow processes on a single node with two GPUs.
+The 13B parameter Llama 2 model will run with two processes on a single node with two GPUs.
 The checkpoint provided requires this configuration.
 
 We found at least 32 GiB of RAM was needed to run the model.

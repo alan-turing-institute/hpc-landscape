@@ -4,7 +4,7 @@ We’ll be downloading the models from:
 
 https://llama.meta.com/llama-downloads
 
-This involves agreeing to the T&Cs in order to get keys, then following the instructions in the [REAMDE](https://github.com/meta-llama/llama3).
+This involves agreeing to the T&Cs in order to get keys, then following the instructions in the [README](https://github.com/meta-llama/llama3).
 
 We can do all of this on a Baskerville login node, so make sure you’ve SSH-ed into Baskerville before continuing.
 
@@ -119,7 +119,7 @@ $ du -hs CodeLlama-*
 
 Having downloaded the models you’ll want to make use of them.
 Take a look at one of the following files to see how to execute them for inference on Baskerville:
-1. `llama3-inference-srun.md`: execute from the command line using `srun`.
-2. `llama3-inference-sbatch.md` execute using a batch script.
+1. `llama3-inference-srun.md`: instructions for executing Llama3 on the command line using `srun`.
+2. `llama3-inference-sbatch.md`: instructions for executing Llama3 using a batch script and `sbatch`.
 
 
