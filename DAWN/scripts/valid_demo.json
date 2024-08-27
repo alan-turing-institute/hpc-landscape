@@ -1,0 +1,11 @@
+[
+    {
+        "instruction": "Generate a python code to compute the factorial of a number."
+	},
+    {
+        "instruction": "Tell me what is the result of 2+2."
+	},
+    {
+        "instruction": "Tell me a joke." 
+	}       
+]
