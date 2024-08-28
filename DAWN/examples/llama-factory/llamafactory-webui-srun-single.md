@@ -78,12 +78,12 @@ index fe700d5..5abdba2 100644
 
 ## Transfer the configuration file
 
-You'll need a DAWN-specific configuration that recognises the single XPU available. We've provided one in the repository, called `config_node01xpu01.yaml` but you'll need to transfer it over to DAWN to use it.
+You'll need a DAWN-specific configuration that recognises the single XPU available. We've provided one in the repository, called [`config_node01xpu01.yaml`](./scripts/config_node01xpu01.yaml) but you'll need to transfer it over to DAWN to use it.
 
 We recommend using `scp` for this, but you can use whatever mechanism you prefer. You can run this on your local machine to transfer the file over.
 
 ```sh
-scp config_node01xpu01.yaml <USERNAME>@login-dawn-dev.hpc.cam.ac.uk:<DIRECTORY_TO_STORE_FILE>
+scp ./scripts/config_node01xpu01.yaml <USERNAME>@login-dawn-dev.hpc.cam.ac.uk:<DIRECTORY_TO_STORE_FILE>
 ```
 
 You should copy the `config_node01xpu01.yaml` file to the same directory that you cloned the `LLaMA-Factory` repository into (i.e. not *inside* the `LLaMA-Factory` directory but at the same level as it).

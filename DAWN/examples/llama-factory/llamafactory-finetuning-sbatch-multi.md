@@ -24,7 +24,7 @@ The code will also automatically download the model from Hugging Face if it's no
 
 ## Investigate the batch file
 
-The relevant batch script we'll be using is `batch-llamafactory-multi.sh`. Before running anything it'll be helpful to understand what's going on inside this script, so open it inside your favourite text editor to take a look.
+The relevant batch script we'll be using is [`batch-llamafactory-multi.sh`](./scripts/batch-llamafactory-multi.sh). Before running anything it'll be helpful to understand what's going on inside this script, so open it inside your favourite text editor to take a look.
 
 There are essentially six sections to this batch file:
 
@@ -40,13 +40,13 @@ There are essentially six sections to this batch file:
 You'll need to run the script directly from DAWN so will need to copy it over to the system. We recommend using `scp` for this, but you can use whatever your preferred mechanism is. You can run this on your local machine to transfer the file over.
 
 ```sh
-scp batch-llamafactory-multi.sh <USERNAME>@login-dawn-dev.hpc.cam.ac.uk:<DIRECTORY_TO_STORE_FILE>
+scp ./scripts/batch-llamafactory-multi.sh <USERNAME>@login-dawn-dev.hpc.cam.ac.uk:<DIRECTORY_TO_STORE_FILE>
 ```
 
-In addition to the batch file, for multi-XPU training you'll also need to use a bespoke configuration for `accelerate`. We've provided the `config_node01xpu04.yaml` file for this, so you'll need to transfer that over as well.
+In addition to the batch file, for multi-XPU training you'll also need to use a bespoke configuration for `accelerate`. We've provided the [`config_node01xpu04.yaml`](./scripts/config_node01xpu04.yaml) file for this, so you'll need to transfer that over as well.
 
 ```sh
-scp config_node01xpu04.yaml <USERNAME>@login-dawn-dev.hpc.cam.ac.uk:<DIRECTORY_TO_STORE_FILE>
+scp ./scripts/config_node01xpu04.yaml <USERNAME>@login-dawn-dev.hpc.cam.ac.uk:<DIRECTORY_TO_STORE_FILE>
 ```
 
 You should copy the `config_node01xpu04.yaml` file to the same directory that you cloned the `LLaMA-Factory` repository into (i.e. not *inside* the `LLaMA-Factory` directory but at the same level as it).
