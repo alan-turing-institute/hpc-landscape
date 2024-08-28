@@ -16,7 +16,7 @@
 set -e errexit
 
 # Directory to move into at the start
-pushd <PATH to LLAMA-Factory>/LLaMA-Factory
+pushd <PATH_TO_LLAMA-FACTORY>/LLaMA-Factory
 
 # Set up modules environment
 echo "Load modules"
@@ -62,15 +62,8 @@ echo "Run LLaMA fine-tuning"
 # Following the instructions from
 # https://github.com/hiyouga/LLaMA-Factory/tree/main?tab=readme-ov-file
 
-# Move in to the LLaMA folder
-cd  <PATH TO LLAMA-FACTORy>/LLaMA-Factory
-
-
-#llamafactory-cli chat examples/inference/llama3_lora_sft.yaml
-#python src/api_curl.py
-accelerate launch src/api_curl.py
+accelerate launch --config_file ./config_node01xpu01.yaml src/api_curl.py
 
 deactivate
 popd
 echo "All done"
-

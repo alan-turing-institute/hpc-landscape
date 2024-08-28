@@ -24,7 +24,7 @@ from llamafactory.chat import ChatModel
 def main():
     chat_model = ChatModel(dict(
         model_name_or_path= "meta-llama/Meta-Llama-3-8B-Instruct",
-        adapter_name_or_path= "saves/llama3-8b-instruct/lora/sft",
+        adapter_name_or_path= "saves/llama3-8b/lora/sft",
         template= "llama3",
         finetuning_type= "lora",
         ))
