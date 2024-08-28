@@ -15,11 +15,11 @@ Before you begin you should download the test scripts and data. In the first ins
 
 ```sh
 cd LLaMA-Factory
-curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/scripts/api_curl.py
-curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/scripts/run_api.sh
-curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/scripts/openai_demo.py
-curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/scripts/valid_demo.json
-curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/config_node01xpu01.yaml
+curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/examples/llama-factory/scripts/api_curl.py
+curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/examples/llama-factory/scripts/run_api.sh
+curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/examples/llama-factory/scripts/openai_demo.py
+curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/examples/llama-factory/scripts/valid_demo.json
+curl -O https://raw.githubusercontent.com/alan-turing-institute/hpc-landscape/main/DAWN/examples/llama-factory/config_node01xpu01.yaml
 ```
 
 The trained model is stored inside the folder `./saves/llama3-8b-instruct/lora/sft/LLaMA-Factory`.
