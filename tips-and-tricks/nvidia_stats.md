@@ -7,7 +7,9 @@ A useful command for Nvidia GPUs is `nvidia-smi`, which displays information abo
 The following command prints out some useful GPU statistics formatted into a line per GPU.
 
 ```bash
-nvidia-smi -l 1 --query-gpu=index,temperature.gpu,utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits | awk -F ',' '{printf "GPU %d | Temp: %d°C | Util: %3d%% | Mem: %05dMB/%dMB\n", $1, $2, $3, $4, $5}'
+nvidia-smi -l 1 --query-gpu=index,temperature.gpu,utilization.gpu,memory.used,memory.total \
+    --format=csv,noheader,nounits | \
+    awk -F ',' '{printf "GPU %d | Temp: %d°C | Util: %3d%% | Mem: %05dMB/%dMB\n", $1, $2, $3, $4, $5}'
 ```
 
 This ends up returning outputs like:
@@ -24,6 +26,6 @@ Here is a breakdown of what this command is doing:
 * `--query-gpu=index,temperature.gpu,utilization.gpu,memory.used,memory.total` - get a choice of GPU statistics
 * `--format=csv,noheader,nounits` output in a format that can be piped
 * `awk -F ','` splits the given CSV into values
-* ` '{printf "GPU %d | Temp: %d°C | Util: %3d%% | Mem: %05dMB/%dMB\n", $1, $2, $3, $4, $5}'` - formats the output so repeated calls are aligned
+* `'{printf "GPU %d | Temp: %d°C | Util: %3d%% | Mem: %05dMB/%dMB\n", $1, $2, $3, $4, $5}'` - formats the output so repeated calls are aligned
 
 If you are using a GPU with more than 100 GB or less than 10GB, it may be worth changing the `5` in `Mem: %05dMB/%dMB` to show the correct number of digits. 
