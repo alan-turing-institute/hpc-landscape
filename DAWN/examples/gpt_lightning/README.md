@@ -2,7 +2,7 @@
 
 **Last updated: 2024-07-10**
 
-At time of writing that latest stable PyTorch Lightning &mdash; at version 2.3.1 &mdahs; isn’t currently supported for use on Intel GPUs.
+At time of writing that latest stable PyTorch Lightning &mdash; at version 2.3.1 &mdash; isn’t currently supported for use on Intel GPUs.
 This example shows how you can take the lit-GPT code &mdash; a version of ming-GPT that’s been amended for use with PyTorch Lightning &mdash; and adjust it so that it works with the Intel GPUs on DAWN.
 
 The version of lit-GPT we’re using has been designed to use PyTorch Lightning version 1.9.5.
