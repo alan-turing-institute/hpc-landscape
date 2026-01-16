@@ -1,7 +1,6 @@
 # Pixi Install on HPC
 
-Pixi is a package manager which can produce reproducible lock files like `uv` but supports multiple languages like `conda`.
-[Website is here.](https://pixi.sh/latest/)
+[Pixi](https://pixi.sh/latest/) is a package manager which can produce reproducible lock files like `uv` but supports multiple languages like `conda`.
 
 This guide doesn't explain how to use Pixi, but rather how to set it up on an HPC.
 This method shouldn't require root access and should be usable by multiple users at the same time.
@@ -17,11 +16,6 @@ cd /go/to/project/directory
 What the install will do is download and install the Pixi binary and set up the folders to store the cache. 
 
 ```bash
-mkdir pixi_install
-mkdir pixi_install/bin
-mkdir pixi_install/cache
-mkdir pixi_install/envs
-
 curl -fsSL https://pixi.sh/install.sh | \
     PIXI_HOME="./pixi_install" \
     PIXI_NO_PATH_UPDATE=true \
@@ -64,4 +58,3 @@ export PIXI_CACHE_DIR="${SCRIPT_DIR}/cache"
 
 echo "Set Pixi Home to ${SCRIPT_DIR}"
 ```
-l
