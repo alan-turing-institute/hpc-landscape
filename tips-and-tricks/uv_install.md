@@ -46,7 +46,21 @@ export UV_PYTHON_BIN_DIR="${PWD}/uv_install/python_bins"
 export UV_TOOL_DIR="${PWD}/uv_install/tools"
 ```
 
-It is a reasonable idea to save these in a shell script with the UV install, but it isn't required.
+These could be added to your bash profile, or it is a reasonable idea to save these in a shell script with the UV install, but it isn't required.
+An example script would look like:
+
+```bash
+#!/bin/bash
+SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+
+export PATH="${SCRIPT_DIR}/bin:$PATH"
+export UV_CACHE_DIR="${SCRIPT_DIR}/cache"
+export UV_PYTHON_INSTALL_DIR="${SCRIPT_DIR}/pythons"
+export UV_PYTHON_BIN_DIR="${SCRIPT_DIR}/python_bins"
+export UV_TOOL_DIR="${SCRIPT_DIR}/tools"
+
+echo "Set UV Install path to ${SCRIPT_DIR}"
+```
 
 ## Using UV
 
