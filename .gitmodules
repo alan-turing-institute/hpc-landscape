@@ -1,3 +1,6 @@
 [submodule "DAWN/examples/gpt-lightning/lig-GPT"]
 	path = DAWN/examples/gpt_lightning/lit-GPT
 	url = https://github.com/llewelld/lit-GPT
+[submodule "example_workflows/multi_node_inference"]
+	path = example_workflows/multi_node_inference
+	url = git@github.com:rwood-97/multi_node_inference.git
