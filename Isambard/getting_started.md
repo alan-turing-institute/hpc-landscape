@@ -39,6 +39,6 @@ It is sometimes necessary to create an SSH key on Isambard-AI (e.g., to access G
 In this case, we recommend generating it on Isambard-AI (so it can be revoked without affecting access from elsewhere) and giving it a strong password.
 
 If you use `uv`, it would be an idea to add a UV install for everyone in the main project folder.
-There is a guide for [installing UV on HPC in the tips and tricks section](../tips-and-tricks/uv_install.md).
+There is a guide for [installing UV on HPC in the example workflows section](../example_workflows/uv_install.md).
 It can be activated by running `source $PROJECTDIR/uv_install/setup_uv.sh`, and adding that line to your `~/.bashrc` will make uv work when you first log on.
 If you do this, you need to remove any `echo` statements so `scp` continues to work.
