@@ -1,5 +1,20 @@
 # How does DGX Spark (GB10) compare vs Isambard-AI (GH200) and Baskerville (A100)?
 
+## vLLM inference with [Qwen3.6 35B](https://huggingface.co/Qwen/Qwen3.6-35B-A3B)
+
+| System | Scenario | Requests (60s) | Req Lat Mdn (s) | TTFT Mdn (ms) | TPOT Mdn (ms) | Output tok/s | Total tok/s |
+|--------|----------|----------------|-----------------|----------------|----------------|--------------|-------------|
+| GB10 (DGX Spark) | 512p + 256o | 7 | 8.6 | 0.0 | 33.8 | 34.5 | 105.0 |
+| GH200 (Isambard-AI) | 512p + 256o | 43 | 1.4 | 0.0 | 5.3 | 191.8 | 582.9 |
+| GB10 (DGX Spark) | 2048p + 512o | 4 | 17.6 | 0.0 | 34.3 | 38.9 | 195.3 |
+| GH200 (Isambard-AI) | 2048p + 512o | 22 | 2.7 | 0.0 | 5.3 | 197.1 | 989.2 |
+| GB10 (DGX Spark) | 128p + 1024o | 2 | 33.8 | 13282.8 | 33.0 | 51.9 | 58.9 |
+| GH200 (Isambard-AI) | 128p + 1024o | 12 | 5.1 | 2593.7 | 5.0 | 218.1 | 247.5 |
+
+i.e. DGX Spark handles 5-6x fewer requests and generates tokens around 6x slower across all scenarios.
+
+For detailed information on the inference benchmarking setup and results see `vllm_inference_benchmark_results/results.md`.
+
 ## Finetuning [Gemma 3 4b](https://huggingface.co/google/gemma-3-4b-it)
 
 | System                         | GPUs  | steps | epochs | times (s) |  it/s | sm% (mean) | sm% (max) | mem% (mean) | mem% (max) |
@@ -30,18 +45,3 @@ i.e. DGX Spark is around 7x slower vs using 1 GPU on Isambard-AI.
 | A100 (Baskerville) | 4 |   128 |      1 |       153 |  0.83 |      51.00 |    100.00 |        9.02 |      40.00 |
 
 i.e. DGX Spark is around 5x slower vs using 1 GPU on Baskerville or around 7-8x slower vs using 2-4 GPUs on Baskerville.
-
-## vLLM inference with [Qwen3.6 35B](https://huggingface.co/Qwen/Qwen3.6-35B-A3B)
-
-| System | Scenario | Requests (60s) | Req Lat Mdn (s) | TTFT Mdn (ms) | TPOT Mdn (ms) | Output tok/s | Total tok/s |
-|--------|----------|----------------|-----------------|----------------|----------------|--------------|-------------|
-| GB10 (DGX Spark) | 512p + 256o | 7 | 8.6 | 0.0 | 33.8 | 34.5 | 105.0 |
-| GH200 (Isambard-AI) | 512p + 256o | 43 | 1.4 | 0.0 | 5.3 | 191.8 | 582.9 |
-| GB10 (DGX Spark) | 2048p + 512o | 4 | 17.6 | 0.0 | 34.3 | 38.9 | 195.3 |
-| GH200 (Isambard-AI) | 2048p + 512o | 22 | 2.7 | 0.0 | 5.3 | 197.1 | 989.2 |
-| GB10 (DGX Spark) | 128p + 1024o | 2 | 33.8 | 13282.8 | 33.0 | 51.9 | 58.9 |
-| GH200 (Isambard-AI) | 128p + 1024o | 12 | 5.1 | 2593.7 | 5.0 | 218.1 | 247.5 |
-
-i.e. DGX Spark handles 5-6x fewer requests and generates tokens around 6x slower across all scenarios.
-
-For detailed information on the inference benchmarking setup and results see `vllm_inference_benchmark_results/results.md`.
