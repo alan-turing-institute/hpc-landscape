@@ -76,12 +76,13 @@ uv run python "import torch; print(torch.cuda.is_available())"
 ```bash
 export TORCH_CUDA_ARCH_LIST="12.0"
 export FLASH_ATTN_CUDA_ARCHS="120"
-export MAX_JOBS=16
+export MAX_JOBS=4
 
 uv pip install --no-build-isolation -v flash-attn
 ```
 
 **Note:** This may take a while to build! 
+**Note 2:** Using more than 4 max jobs may cause the Spark to run out of memory and crash, so we recommend keeping this at 4 or lower.
 
 ## vLLM
 
