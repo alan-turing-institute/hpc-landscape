@@ -14,7 +14,7 @@ If you would like to use a DGX Spark for a live demo, please follow the steps be
 
 5. **On the morning of the demo,** collect the DGX Spark from the IT room, along with a screen, keyboard and mouse. You will need to set these up in the area where you will be doing your demo. If you need help with this, please contact the IT team or Research Computing team.
 
-6. Once set up, you should be able to log into the Spark using your user account and run your demo. Note that you will not be able to ssh into the Spark from your laptop while you are using it for the demo, so you will need to run everything directly on the Spark itself. If you need internet access, you should connect to `Turing Guest`.
+6. Once set up, you should be able to log into the Spark using your user account and run your demo. Note that you will not be able to ssh into the Spark from your laptop while you are using it for the demo, so you will need to run everything directly on the Spark itself. If you need internet access, you should connect to "Turing Guest".
 
 7. **After the demo**, please make sure to return the DGX Spark, screen, keyboard and mouse to the IT room. 
 
