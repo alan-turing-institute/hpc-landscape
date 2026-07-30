@@ -46,13 +46,25 @@ Then, once the above are complete:
 
 ## Using the Spark
 
-We currently have no user workload management system set up on the DGX Sparks, so you should coordinate with your team to ensure that only one person is using the Spark's GPU at any time. 
+### Reservation system
 
-For now, we are using [nvitop](https://nvitop.readthedocs.io/en/latest/) to help with this. It is a CLI tool that shows you the current GPU usage on the Spark, what processes are running and which user launched those processes. Use this before running any workloads to check if the GPU is currently in use by someone else. If it is, please coordinate with them and the rest of your team re. when it will be free to use.
+To avoid stepping on each other's training runs, both Sparks have a lightweight reservation system.
+When you SSH in, you'll see a banner telling you whether the machine is free or who has it and until when.
 
-We are planning to set up a more robust user workload management system in the future.
+Reservations are controlled using three commands (all to be run on the Spark):
+1. `reserve [hours]` — Claim the machine for `[hours]` hours (defaults to 4 hours if no parameter is specified).
+2. `reserve status` — Shows the user that currently holds the reservation.
+3. `reserve release` — Releases the reservation when you're done.
 
-## Installing Python packages
+The system is advisory. You can still log in and run processes when a machine is reserved, but please don't launch heavy jobs on a claimed machine.
+
+Reservations auto-expire 10 minutes after their end time, so a forgotten one won't block the machine forever.
+In addition, anyone can `reserve release` a stale lock.
+
+If you don't see the banner at login, check `~/.ssh/config` on your laptop for a `RemoteCommand` line in that host's block and delete it.
+This suppresses the login banner and can sometimes be added by VS Code and the like.
+
+### Installing Python packages
 
 The DGX Spark has CUDA 13.0 and CUDA [compute capability 12.1](https://developer.nvidia.com/cuda/gpus) (sm_121). Like Isambard-AI's GH200 GPUs, it also has `aarch64` architecture. Since this is a newer and less common architecture, some Python packages may not have pre-built wheels available on PyPI and so you may need to build these from source.
 
