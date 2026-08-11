@@ -48,7 +48,7 @@ mkdir -p "$WORKDIR" "$HF_HOME" "$UV_CACHE_DIR"
 # Fail fast: no point spending 20+ minutes on venv/NVHPC setup only to
 # discover at the very end that HF_TOKEN was never set. Only required
 # if the model hasn't been downloaded yet.
-if [ ! -f "$WORKDIR/model_path.txt" ] && [ -z "${HF_TOKEN:-}" ]; then
+if [ ! -f "$WORKDIR/k2.6_model_path.txt" ] && [ -z "${HF_TOKEN:-}" ]; then
     echo "ERROR: HF_TOKEN is not set." >&2
     echo "Run 'export HF_TOKEN=hf_xxxxxxxx' before submitting this job." >&2
     exit 1
