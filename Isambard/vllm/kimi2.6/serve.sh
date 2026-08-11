@@ -40,7 +40,9 @@ export PATH=$CUDA_HOME/bin:$PATH
 export CPATH=$NVHPC_ROOT/cuda/13.1/include:$NVHPC_ROOT/math_libs/13.1/include:$NVHPC_ROOT/compilers/include:${CPATH:-}
 
 # Model path was written by setup.sh's download step.
-MODEL_PATH=$(cat "$WORKDIR/k2.6_model_path.txt")
+MODEL_PATH_FILE="$WORKDIR/k2.6_model_path.txt"
+[ -f "$MODEL_PATH_FILE" ] || { echo "ERROR: Missing $MODEL_PATH_FILE. Run setup.sh first (or check WORKDIR)." >&2; exit 1; }
+MODEL_PATH=$(cat "$MODEL_PATH_FILE")
 MODEL_NAME="moonshotai/Kimi-K2.6"
 
 module load brics/nccl brics/aws-ofi-nccl
