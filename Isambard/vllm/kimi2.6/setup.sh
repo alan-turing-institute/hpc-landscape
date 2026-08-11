@@ -78,7 +78,7 @@ uv pip install -U vllm==0.26.0 flashinfer-python ray[default] huggingface_hub \
 # (libcudart.so.13) than torch ships with. Both versions coexist on
 # disk under nvidia/cuXX/lib/, just not on the default linker search
 # path -- point it there.
-export LD_LIBRARY_PATH=$(find "$VIRTUAL_ENV/lib/python3.12/site-packages/nvidia" -maxdepth 2 -type d -name lib | tr '\n' ':')$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$(find "$VIRTUAL_ENV/lib/python3.12/site-packages/nvidia" -maxdepth 2 -type d -name lib | tr '\n' ':')${LD_LIBRARY_PATH:-}
 
 echo "torch/vllm versions:"
 vllm --version
