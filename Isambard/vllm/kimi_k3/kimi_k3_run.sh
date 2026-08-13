@@ -68,6 +68,10 @@ if [[ "$NODE_RANK" -eq 0 ]]; then
 
     # Wait for the REST API to be available
     until curl -s http://localhost:8000/v1/models >/dev/null 2>&1; do
+        if ! kill -0 "$VLLM_PID" 2>/dev/null; then
+            echo "vLLM process died while waiting for it to start" >&2
+            exit 1
+        fi
         sleep 60
         echo "Waiting for vLLM to start..."
     done
@@ -75,7 +79,8 @@ if [[ "$NODE_RANK" -eq 0 ]]; then
 
     curl -s http://localhost:8000/v1/chat/completions \
         -H "Content-Type: application/json" \
-        -d '{"model": "moonshotai/Kimi-K3", "messages": [{"role": "user", "content": "What ingredients do I need to bake a cake?."}], "max_tokens": 500}'
+        -d '{"model": "moonshotai/Kimi-K3", "messages": [{"role": "user", "content": "What ingredients do I need to bake a cake?."}], "max_tokens": 500}' \
+        || echo "warning: sanity check request failed"
     echo
 
     wait "$VLLM_PID"

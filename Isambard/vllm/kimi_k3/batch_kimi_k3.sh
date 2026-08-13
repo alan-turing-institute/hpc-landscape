@@ -23,7 +23,8 @@ mkdir -p "$HF_HOME" logs/kimi_k3
 
 # Derive the head node's address for vLLM's --master-addr.
 export PRIMARY_HOST=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1)
-export PRIMARY_IP=$(srun --nodes=1 --ntasks=1 -w "$PRIMARY_HOST" hostname -i | tr -d ' ')
+export PRIMARY_IP=$(srun --nodes=1 --ntasks=1 -w "$PRIMARY_HOST" \
+    bash -c "ip -4 -o addr show hsn0 | awk '{print \$4}' | cut -d/ -f1 | head -n1")
 echo "Primary host: $PRIMARY_HOST ($PRIMARY_IP)"
 
 # Propagate into the container.

@@ -4,7 +4,13 @@ Runs `vllm/vllm-openai:kimi-k3` on 8 nodes (32x GH200 GPUs) using apptainer.
 
 ## How to run
 
-1. Build the container:
+1. Build the container. This must be done on a compute node, not the login node. The easiest way is to ask for an interactive session:
+
+```bash
+srun -N 1 --gpus 1 --mem=0 --time=01:00:00 --pty bash
+```
+
+Then, on the compute node in the project directory, run:
 
 ```bash
 mkdir -p container

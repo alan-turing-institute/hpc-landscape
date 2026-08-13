@@ -6,6 +6,10 @@
 
 # Check that CUDA compatibility is working and we can start vllm
 
+module purge
+module load brics/default
+module load brics/apptainer-multi-node
+
 export APPTAINERENV_VLLM_ENABLE_CUDA_COMPATIBILITY=1
 export APPTAINERENV_LD_PRELOAD=/usr/local/cuda-13.0/compat/libcuda.so.1
 
