@@ -26,58 +26,44 @@
 
 set -euo pipefail
 
+module purge
+module load brics/default brics/nccl brics/aws-ofi-nccl
+
 WORKDIR=<<<PROJECT_STORAGE_PATH>>>
 ENV_DIR=$WORKDIR/env
 NVHPC_INSTALL_DIR=$WORKDIR/nvhpc
 
-# Where model weights get cached. Respects an existing HF_HOME if
-# you've already set one (e.g. a shared cache across projects);
-# otherwise defaults to project storage under WORKDIR.
+# Where model weights get cached
 : "${HF_HOME:=$WORKDIR/hf_cache}"
 export HF_HOME
 echo "Using HF_HOME: $HF_HOME"
 
-# uv's default cache lives under $HOME (NFS). ENV_DIR is on Lustre --
-# different filesystems, so uv can't hardlink packages into the venv
-# and silently falls back to slow full copies. Keep the cache on the
-# same filesystem as everything else.
-export UV_CACHE_DIR=$WORKDIR/.uv-cache
+# Setting uv's default cache in the project storage
+: "${UV_CACHE_DIR:=$WORKDIR/.uv-cache}"
 
 mkdir -p "$WORKDIR" "$HF_HOME" "$UV_CACHE_DIR"
 
-# Fail fast: no point spending 20+ minutes on venv/NVHPC setup only to
-# discover at the very end that HF_TOKEN was never set. Only required
-# if the model hasn't been downloaded yet.
-if [ ! -f "$WORKDIR/k2.6_model_path.txt" ] && [ -z "${HF_TOKEN:-}" ]; then
+# Checking for HF_TOKEN if the model weights haven't been downloaded yet.
     echo "ERROR: HF_TOKEN is not set." >&2
     echo "Run 'export HF_TOKEN=hf_xxxxxxxx' before submitting this job." >&2
     exit 1
 fi
 
-module load brics/nccl brics/aws-ofi-nccl
-
 # --- 1. Python environment ------------------------------------
 echo "=== [1/3] Python environment ==="
 if [ ! -f "$ENV_DIR/bin/activate" ]; then
-    # Lustre's default striping is tuned for large files split across
-    # storage targets -- a venv is thousands of small files, so a
-    # single stripe avoids unnecessary metadata overhead.
+    # making sure that Lustre's striping is set to 1 for the env dir, 
+    # so that many small files don't get spread across OSTs
     mkdir -p "$ENV_DIR"
     lfs setstripe -c 1 "$ENV_DIR" || true
     uv venv --seed --python=3.12 "$ENV_DIR"
 fi
 source "$ENV_DIR/bin/activate"
 
-# K2.6 needs vLLM >= 0.25.0. PyPI's stable release isn't there yet,
-# so vLLM's own nightly wheel index is added as a fallback source.
 uv pip install -U vllm==0.26.0 flashinfer-python ray[default] huggingface_hub \
     --torch-backend=auto \
     --extra-index-url https://wheels.vllm.ai/nightly/vllm
 
-# This vLLM build's compiled extensions want a newer CUDA runtime
-# (libcudart.so.13) than torch ships with. Both versions coexist on
-# disk under nvidia/cuXX/lib/, just not on the default linker search
-# path -- point it there.
 export LD_LIBRARY_PATH=$(find "$VIRTUAL_ENV/lib/python3.12/site-packages/nvidia" -maxdepth 2 -type d -name lib | tr '\n' ':')${LD_LIBRARY_PATH:-}
 
 echo "torch/vllm versions:"
@@ -110,16 +96,8 @@ if [ -f "$MODEL_PATH_FILE" ]; then
     echo "Already downloaded, skipping. See $MODEL_PATH_FILE:"
     cat "$MODEL_PATH_FILE"
 else
-    # Log in first -- Isambard shares outbound IPs across users, so
-    # unauthenticated downloads can get rate-limited by Hugging Face.
     hf auth login --token "$HF_TOKEN"
-    # HF_HUB_ENABLE_HF_TRANSFER is deprecated; this is its replacement
-    # for the current Xet-based download backend.
     export HF_XET_HIGH_PERFORMANCE=1
-    # hf download's stdout is decorated ("✓ Downloaded" + indented
-    # "path: ..." line), not a clean single-line path -- tee the full
-    # output to stderr so it's still visible in the job log, and pull
-    # just the path for the variable.
     MODEL_PATH=$(hf download moonshotai/Kimi-K2.6 | tee /dev/stderr | grep "path:" | sed 's/.*path: *//')
     echo "$MODEL_PATH" > "$MODEL_PATH_FILE"
     echo "Model downloaded to: $MODEL_PATH"

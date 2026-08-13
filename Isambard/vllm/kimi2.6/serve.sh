@@ -12,16 +12,16 @@
 #
 # Before running, replace:
 #   <<<PROJECT_STORAGE_PATH>>>  the same path you used in setup.sh
-#   <<<ISAMBARD_USERNAME>>>     your Isambard username (only used in
-#                               the laptop SSH command printed below)
-#   <<<PROJECT_CODE>>>          your project code, e.g. u6fw -- the
-#                               part before .aip2.isambard in the ssh
-#                               command you normally use to log in
+#   <<<ISAMBARD_USERNAME>>>     your Isambard username
+#   <<<PROJECT_CODE>>>          your project code, e.g. u6fw
 #
 # Run once setup.sh has finished:  sbatch serve.sh
 # ==============================================================
 
 set -euo pipefail
+
+module purge
+module load brics/default brics/nccl brics/aws-ofi-nccl
 
 WORKDIR=<<<PROJECT_STORAGE_PATH>>>
 ENV_DIR=$WORKDIR/env
@@ -30,9 +30,6 @@ export HF_HOME=$WORKDIR/hf_cache
 # CUDA forward compatibility -- lets this CUDA-13-targeted vLLM build
 # run on Isambard-AI's CUDA-12.x driver. compat and math_libs must come
 # first in LD_LIBRARY_PATH, ahead of the system driver's libcuda.so.
-# math_libs (curand.h etc) is needed by flashinfer's JIT compile step.
-# Deliberately NOT adding NVHPC's own bundled nccl/nvshmem -- those
-# could shadow the Slingshot-tuned brics/nccl module loaded below.
 NVHPC_ROOT=$WORKDIR/nvhpc/Linux_aarch64/26.3
 export LD_LIBRARY_PATH=$NVHPC_ROOT/cuda/13.1/compat:$NVHPC_ROOT/math_libs/13.1/lib64:${LD_LIBRARY_PATH:-}
 export CUDA_HOME=$NVHPC_ROOT/cuda/13.1
@@ -45,9 +42,7 @@ MODEL_PATH_FILE="$WORKDIR/k2.6_model_path.txt"
 MODEL_PATH=$(cat "$MODEL_PATH_FILE")
 MODEL_NAME="moonshotai/Kimi-K2.6"
 
-module load brics/nccl brics/aws-ofi-nccl
-
-# --- Figure out which node is "head" and which are "workers" ---
+# Figure out which node is "head" and which are "workers"
 NODES=($(scontrol show hostnames $SLURM_NODELIST))
 HEAD_NODE=${NODES[0]}
 HEAD_IP=$(dig +short $HEAD_NODE)
@@ -73,7 +68,7 @@ activate_env() {
 }
 activate_env
 
-# --- Start Ray on every node: one call for the head, one per worker ---
+# Start Ray on every node: one call for the head, one per worker
 start_ray_node() {
     local node=$1 ip=$2 extra_args=$3
     srun --nodelist=$node --nodes=1 --gpus=4 --cpus-per-task=72 --ntasks-per-node=1 \
@@ -93,11 +88,10 @@ echo "Checking cluster status (should show 8 GPUs total across 2 nodes)..."
 srun --overlap --nodelist=$HEAD_NODE --nodes=1 --ntasks=1 --gpus=0 \
     bash -c "source $ENV_DIR/bin/activate; ray status"
 
-# --- Start vLLM, pointed at the Ray cluster we just built ---
+# Start vLLM, pointed at the Ray cluster
 # --enforce-eager: disables CUDA graph capture. Required -- vLLM V1 +
 # Ray + pipeline-parallelism hits a known illegal-memory-access bug
-# during graph capture (see ray-project/ray#51596). Trade-off: slightly
-# higher per-token latency, not a correctness issue.
+# during graph capture (see ray-project/ray#51596).
 echo "Starting vLLM serve..."
 srun --overlap --nodelist=$HEAD_NODE --nodes=1 --gpus=4 --ntasks-per-node=1 \
     bash -c "
