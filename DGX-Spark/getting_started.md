@@ -52,7 +52,7 @@ For now, we are using [nvitop](https://nvitop.readthedocs.io/en/latest/) to help
 
 We are planning to set up a more robust user workload management system in the future.
 
-## Installing Python packages
+## Installing Python packages
 
 The DGX Spark has CUDA 13.0 and CUDA [compute capability 12.1](https://developer.nvidia.com/cuda/gpus) (sm_121). Like Isambard-AI's GH200 GPUs, it also has `aarch64` architecture. Since this is a newer and less common architecture, some Python packages may not have pre-built wheels available on PyPI and so you may need to build these from source.
 
