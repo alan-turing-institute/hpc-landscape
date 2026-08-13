@@ -58,6 +58,12 @@ sudo useradd -m -G users -s /bin/bash <username>
 You should then set the password for the user using:
 
 ```bash
+sudo passwd <username>
+```
+
+and make that password expire when they first login:
+
+```bash
 sudo passwd -e <username>
 ```
 
