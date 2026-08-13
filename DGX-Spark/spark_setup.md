@@ -58,7 +58,7 @@ sudo useradd -m -G users -s /bin/bash <username>
 You should then set the password for the user using:
 
 ```bash
-sudo passwd <username>
+sudo passwd -e <username>
 ```
 
 To check its worked, run:
