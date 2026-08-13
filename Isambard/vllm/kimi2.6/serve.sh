@@ -102,8 +102,8 @@ srun --overlap --nodelist=$HEAD_NODE --nodes=1 --gpus=4 --ntasks-per-node=1 \
         export CPATH=$NVHPC_ROOT/cuda/13.1/include:$NVHPC_ROOT/math_libs/13.1/include:$NVHPC_ROOT/compilers/include:\${CPATH:-}
         export LD_LIBRARY_PATH=\$(find \$VIRTUAL_ENV/lib/python3.12/site-packages/nvidia -maxdepth 2 -type d -name lib | tr '\n' ':')\$LD_LIBRARY_PATH
 
-        vllm serve $MODEL_PATH \
-            --served-model-name $MODEL_NAME \
+        vllm serve "$MODEL_PATH" \
+            --served-model-name "$MODEL_NAME" \
             --distributed-executor-backend ray \
             --host 0.0.0.0 --port 8000 \
             --trust-remote-code \
