@@ -40,16 +40,17 @@ echo "Using HF_HOME: $HF_HOME"
 
 # Setting uv's default cache in the project storage
 : "${UV_CACHE_DIR:=$WORKDIR/.uv-cache}"
+export UV_CACHE_DIR
 
 mkdir -p "$WORKDIR" "$HF_HOME" "$UV_CACHE_DIR"
 
 # Checking for HF_TOKEN if the model weights haven't been downloaded yet.
+if [ ! -f "$WORKDIR/model_path.txt" ] && [ -z "${HF_TOKEN:-}" ]; then
     echo "ERROR: HF_TOKEN is not set." >&2
     echo "Run 'export HF_TOKEN=hf_xxxxxxxx' before submitting this job." >&2
     exit 1
 fi
 
-# --- 1. Python environment ------------------------------------
 echo "=== [1/3] Python environment ==="
 if [ ! -f "$ENV_DIR/bin/activate" ]; then
     # making sure that Lustre's striping is set to 1 for the env dir, 
@@ -70,7 +71,6 @@ echo "torch/vllm versions:"
 vllm --version
 python -c "import torch; print('torch:', torch.__version__)"
 
-# --- 2. NVIDIA HPC SDK (CUDA forward compatibility) ------------
 # Needed because Isambard-AI's driver targets CUDA 12.x, but this
 # vLLM build is compiled against CUDA 13. See:
 # https://docs.isambard.ac.uk/user-documentation/guides/gpus_and_cuda/#cuda-forward-compatibility
@@ -88,7 +88,6 @@ else
 fi
 echo "NVHPC_ROOT: $NVHPC_INSTALL_DIR/Linux_aarch64/26.3"
 
-# --- 3. Download weights ----------------------------------------
 echo "=== [3/3] Model weights ==="
 
 MODEL_PATH_FILE="$WORKDIR/k2.6_model_path.txt"

@@ -42,10 +42,19 @@ MODEL_PATH_FILE="$WORKDIR/k2.6_model_path.txt"
 MODEL_PATH=$(cat "$MODEL_PATH_FILE")
 MODEL_NAME="moonshotai/Kimi-K2.6"
 
+# Resolve a node's IP
+resolve_ip() {
+    local node=$1 ip
+    ip=$(getent hosts "$node" 2>/dev/null | awk '{print $1; exit}')
+    [ -n "$ip" ] || ip=$(dig +short "$node" | head -n1)
+    [ -n "$ip" ] || { echo "ERROR: Could not resolve IP for node $node" >&2; exit 1; }
+    echo "$ip"
+}
+
 # Figure out which node is "head" and which are "workers"
 NODES=($(scontrol show hostnames $SLURM_NODELIST))
 HEAD_NODE=${NODES[0]}
-HEAD_IP=$(dig +short $HEAD_NODE)
+HEAD_IP=$(resolve_ip "$HEAD_NODE")
 RAY_PORT=6378
 export VLLM_HOST_IP=$HEAD_IP
 
@@ -77,7 +86,7 @@ start_ray_node() {
 
 start_ray_node "$HEAD_NODE" "$HEAD_IP" "--head --port=$RAY_PORT"
 for node in "${NODES[@]:1}"; do
-    ip=$(dig +short $node)
+    ip=$(resolve_ip "$node")
     start_ray_node "$node" "$ip" "--address=$HEAD_IP:$RAY_PORT"
 done
 
