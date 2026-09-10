@@ -28,9 +28,8 @@ In the future we may switch to using [Jupyter Book](https://jupyterbook.org/), [
 
 ## Contributing
 
-We welcome contributions.
-If you’d like to contribute, please submit a pull request to the repository in the normal way.
-This will be reviewed by the Research Computing Platforms team prior to merging.
+We welcome contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidance on
+where to add material, writing reproducible HPC instructions, and submitting a pull request.
 
 ## Licence
 
